@@ -4,5 +4,4 @@ export type Artwork = {
   artist_display: string;
   is_public_domain: boolean;
   image_id: string;
-  iiif_url: string;
 };

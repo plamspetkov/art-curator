@@ -5,15 +5,17 @@ type ArtworkCardProps = {
   iiifUrl: string;
 };
 
-const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
-  const { title, artist_display, iiif_url, image_id } = artwork;
+const ArtworkCard = ({ artwork, iiifUrl }: ArtworkCardProps) => {
+  const { title, artist_display, image_id } = artwork;
 
-  console.log(iiif_url);
+  const imageUrl = `${iiifUrl}/${image_id}/full/843,/0/default.jpg`;
+
+  console.log(iiifUrl);
   return (
     <div className="artwork-card">
       <h2>{title}</h2>
       <p>{artist_display}</p>
-      <img src={iiif_url + "/" + image_id} alt={title} />
+      <img src={imageUrl} alt={title} />
     </div>
   );
 };

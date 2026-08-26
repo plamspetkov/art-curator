@@ -1,7 +1,11 @@
-import React from "react";
-import type { Artwork } from "../App";
+import type { Artwork } from "../types/Artworks";
 
-const ArtworkCard = ({ title, artist_display }: Artwork) => {
+type ArtworkCardProps = {
+  artwork: Artwork;
+};
+
+const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
+  const { title, artist_display } = artwork;
   return (
     <div className="artwork-card">
       <h2>{title}</h2>

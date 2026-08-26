@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import ArtworkCard from "./components/ArtworkCard";
-
-export type Artwork = {
-  id: number;
-  title: string;
-  artist_display: string;
-  is_public_domain: boolean;
-  image_id: string;
-};
+import type { Artwork } from "./types/Artworks";
 
 function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
@@ -38,7 +31,7 @@ function App() {
       <h1>Art Curator</h1>
       <div className="artwork-grid">
         {artworks.map((artwork) => (
-          <ArtworkCard key={artwork.id} {...artwork} />
+          <ArtworkCard key={artwork?.id} artwork={artwork} />
         ))}
       </div>
     </>

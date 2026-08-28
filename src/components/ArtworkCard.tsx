@@ -5,7 +5,9 @@ type ArtworkCardProps = {
 };
 
 const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
-  const { title, artist_display, url } = artwork;
+  const title = artwork.title;
+  const url = artwork.images.web.url;
+  const description = artwork.creators[0]?.description;
 
   //   console.log(iiifUrl);
   console.log("image_id:", url);
@@ -13,7 +15,7 @@ const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
   return (
     <div className="artwork-card">
       <h2>{title}</h2>
-      <p>{artist_display}</p>
+      <p>{description}</p>
       <img src={url} alt={title} />
     </div>
   );

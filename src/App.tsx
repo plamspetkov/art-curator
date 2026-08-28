@@ -11,19 +11,18 @@ function App() {
     async function getArtworks() {
       // const apiUrl =
       //   "https://openaccess-api.clevelandart.org/api/exhibitions/453138?indent=1";
-      const apiUrl =
-        "https://openaccess-api.clevelandart.org/api/exhibitions/453138?include_artworks=1";
+      const apiUrl = "https://openaccess-api.clevelandart.org/api/artworks";
 
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, { method: "GET" });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+        console.log(data.data[0]);
         // console.log(data.config.iiif_url);
-        setArtworks(data.data.artworks);
+        setArtworks(data.data);
         // setIiif(data.config.iiif_url);
       } catch (error) {
         console.error("Error fetching artworks:", error);

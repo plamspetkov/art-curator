@@ -5,11 +5,14 @@ import type { Artwork } from "./types/Artwork";
 
 function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [iiif, setIiif] = useState<string>("");
+  // const [iiif, setIiif] = useState<string>("");
 
   useEffect(() => {
     async function getArtworks() {
-      const apiUrl = "https://api.artic.edu/api/v1/artworks";
+      // const apiUrl =
+      //   "https://openaccess-api.clevelandart.org/api/exhibitions/453138?indent=1";
+      const apiUrl =
+        "https://openaccess-api.clevelandart.org/api/exhibitions/453138?include_artworks=1";
 
       try {
         const response = await fetch(apiUrl);
@@ -18,9 +21,10 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data.config.iiif_url);
-        setArtworks(data.data);
-        setIiif(data.config.iiif_url);
+        console.log(data);
+        // console.log(data.config.iiif_url);
+        setArtworks(data.data.artworks);
+        // setIiif(data.config.iiif_url);
       } catch (error) {
         console.error("Error fetching artworks:", error);
       }
@@ -34,7 +38,7 @@ function App() {
       <h1>Art Curator</h1>
       <div className="artwork-grid">
         {artworks.map((artwork) => (
-          <ArtworkCard key={artwork.id} artwork={artwork} iiifUrl={iiif} />
+          <ArtworkCard key={artwork.id} artwork={artwork} />
         ))}
       </div>
     </>

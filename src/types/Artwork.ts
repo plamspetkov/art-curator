@@ -5,7 +5,7 @@ export type Artwork = {
     description: string;
   }[];
   images: {
-    web: {
+    web?: {
       url: string;
     };
   };

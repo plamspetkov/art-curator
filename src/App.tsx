@@ -11,7 +11,8 @@ function App() {
     async function getArtworks() {
       // const apiUrl =
       //   "https://openaccess-api.clevelandart.org/api/exhibitions/453138?indent=1";
-      const apiUrl = "https://openaccess-api.clevelandart.org/api/artworks";
+      const apiUrl =
+        "https://openaccess-api.clevelandart.org/api/artworks?has_image=1";
 
       try {
         const response = await fetch(apiUrl, { method: "GET" });

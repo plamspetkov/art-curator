@@ -6,7 +6,7 @@ type ArtworkCardProps = {
 
 const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
   const title = artwork.title;
-  const url = artwork.images.web.url;
+  const url = artwork.images.web?.url;
   const description = artwork.creators[0]?.description;
 
   //   console.log(iiifUrl);

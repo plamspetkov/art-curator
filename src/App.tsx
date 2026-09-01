@@ -9,6 +9,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
     async function getArtworks() {
       setError(null);
       // const apiUrl =
@@ -17,23 +18,37 @@ function App() {
         "https://openaccess-api.clevelandart.org/api/artworks?has_image=1";
 
       try {
-        const response = await fetch(apiUrl, { method: "GET" });
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          signal: controller.signal,
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data.data);
 
-        setArtworks(data.data);
+        if (!controller.signal.aborted) {
+          setArtworks(data.data);
+        }
       } catch (error) {
+        if (controller.signal.aborted) {
+          console.log("Fetch aborted");
+          return;
+        }
         setError(`Error fetching artworks: ${error}`);
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     }
 
     getArtworks();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (

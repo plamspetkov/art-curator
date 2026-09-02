@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ArtworkCard from "./components/ArtworkCard";
 import type { Artwork } from "./types/Artwork";
+import SearchForm from "./components/SearchForm";
 
 function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -54,6 +57,9 @@ function App() {
   return (
     <>
       <h1>Art Curator</h1>
+
+      <SearchForm searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
       {isLoading && <p>Loading artworks...</p>}
 
       {error && <p>{error}</p>}

@@ -4,21 +4,59 @@ import ArtworkCard from "./components/ArtworkCard";
 import type { Artwork } from "./types/Artwork";
 import SearchForm from "./components/SearchForm";
 
+export type searchMode =
+  | "all"
+  | "artists"
+  | "title"
+  | "medium"
+  | "technique"
+  | "culture";
+
 function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
+  const [selectedMode, setSelectedMode] = useState<searchMode>("all");
+  const [searchMode, setSearchMode] = useState<searchMode>("all");
+
+  console.log("seach query: ", searchQuery);
 
   useEffect(() => {
     const controller = new AbortController();
     async function getArtworks() {
+      setIsLoading(true);
       setError(null);
-      // const apiUrl =
-      //   "https://openaccess-api.clevelandart.org/api/exhibitions/453138?indent=1";
-      const apiUrl =
-        "https://openaccess-api.clevelandart.org/api/artworks?has_image=1";
+
+      const params = new URLSearchParams();
+
+      params.set("has_image", "1");
+
+      if (searchQuery.trim() !== "") {
+        switch (searchMode) {
+          case "artists":
+            params.set("artists", searchQuery.trim());
+            break;
+          case "title":
+            params.set("title", searchQuery.trim());
+            break;
+          case "medium":
+            params.set("medium", searchQuery.trim());
+            break;
+          case "technique":
+            params.set("technique", searchQuery.trim());
+            break;
+          case "culture":
+            params.set("culture", searchQuery.trim());
+            break;
+          default:
+            params.set("q", searchQuery.trim());
+            break;
+        }
+      }
+
+      const apiUrl = `https://openaccess-api.clevelandart.org/api/artworks?&${params.toString()}`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -52,13 +90,21 @@ function App() {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [searchQuery, searchMode]);
 
   return (
     <>
       <h1>Art Curator</h1>
 
-      <SearchForm searchInput={searchInput} setSearchInput={setSearchInput} />
+      <SearchForm
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        setSearchQuery={setSearchQuery}
+        searchMode={searchMode}
+        setSearchMode={setSearchMode}
+        setSelectedMode={setSelectedMode}
+        selectedMode={selectedMode}
+      />
 
       {isLoading && <p>Loading artworks...</p>}
 

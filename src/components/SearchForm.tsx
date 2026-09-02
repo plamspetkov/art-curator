@@ -1,16 +1,16 @@
 type SearchFormProps = {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
+  searchInput: string;
+  setSearchInput: (input: string) => void;
 };
 
-const SearchForm = ({ searchQuery, setSearchQuery }: SearchFormProps) => {
+const SearchForm = ({ searchInput, setSearchInput }: SearchFormProps) => {
   return (
     <form>
       <input
         type="text"
         placeholder="Search..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
       />
       <button type="submit">Search</button>
     </form>

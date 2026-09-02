@@ -58,7 +58,7 @@ function App() {
     <>
       <h1>Art Curator</h1>
 
-      <SearchForm searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SearchForm searchInput={searchInput} setSearchInput={setSearchInput} />
 
       {isLoading && <p>Loading artworks...</p>}
 

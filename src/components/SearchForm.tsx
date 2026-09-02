@@ -5,7 +5,6 @@ type SearchFormProps = {
   searchInput: string;
   setSearchInput: Dispatch<SetStateAction<string>>;
   setSearchQuery: Dispatch<SetStateAction<string>>;
-  searchMode: searchMode;
   setSearchMode: Dispatch<SetStateAction<searchMode>>;
   setSelectedMode: Dispatch<SetStateAction<searchMode>>;
   selectedMode: searchMode;
@@ -15,7 +14,6 @@ const SearchForm = ({
   searchInput,
   setSearchInput,
   setSearchQuery,
-  searchMode,
   setSearchMode,
   selectedMode,
   setSelectedMode,

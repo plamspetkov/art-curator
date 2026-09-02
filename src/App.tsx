@@ -100,7 +100,6 @@ function App() {
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         setSearchQuery={setSearchQuery}
-        searchMode={searchMode}
         setSearchMode={setSearchMode}
         setSelectedMode={setSelectedMode}
         selectedMode={selectedMode}

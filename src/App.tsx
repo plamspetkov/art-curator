@@ -2,31 +2,37 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ArtworkCard from "./components/ArtworkCard";
 import type { Artwork } from "./types/Artwork";
-import SearchForm from "./components/SearchForm";
+import SearchForm, { type SearchMode } from "./components/SearchForm";
 import ToggleButton from "./components/ToggleButton";
+import AdvancedSearchForm, {
+  type AdvancedSearchParams,
+} from "./components/AdvancedSearchForm";
 
 export type SearchView = boolean;
 
-export type SearchMode =
-  | "all"
-  | "artists"
-  | "title"
-  | "medium"
-  | "technique"
-  | "culture";
+export type SubmittedSearchView = boolean;
 
 function App() {
   const [searchView, setSearchView] = useState<SearchView>(false);
+  const [submittedSearchView, setSubmittedSearchView] =
+    useState<SubmittedSearchView>(false);
 
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedMode, setSelectedMode] = useState<SearchMode>("all");
+
   const [searchMode, setSearchMode] = useState<SearchMode>("all");
 
-  console.log("seach query: ", searchQuery);
+  const [advancedSearchParams, setAdvancedSearchParams] =
+    useState<AdvancedSearchParams>({
+      artist: "",
+      title: "",
+      technique: "",
+      culture: "",
+    });
+
+  console.log("search query: ", searchQuery);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -38,30 +44,52 @@ function App() {
 
       params.set("has_image", "1");
 
-      if (searchQuery.trim() !== "") {
-        switch (searchMode) {
-          case "artists":
-            params.set("artists", searchQuery.trim());
-            break;
-          case "title":
-            params.set("title", searchQuery.trim());
-            break;
-          case "medium":
-            params.set("medium", searchQuery.trim());
-            break;
-          case "technique":
-            params.set("technique", searchQuery.trim());
-            break;
-          case "culture":
-            params.set("culture", searchQuery.trim());
-            break;
-          default:
-            params.set("q", searchQuery.trim());
-            break;
+      // Simple Search Fields
+      if (submittedSearchView === false) {
+        if (searchQuery.trim() !== "") {
+          switch (searchMode) {
+            case "artists":
+              params.set("artists", searchQuery.trim());
+              break;
+            case "title":
+              params.set("title", searchQuery.trim());
+              break;
+            case "medium":
+              params.set("medium", searchQuery.trim());
+              break;
+            case "technique":
+              params.set("technique", searchQuery.trim());
+              break;
+            case "culture":
+              params.set("culture", searchQuery.trim());
+              break;
+            default:
+              params.set("q", searchQuery.trim());
+              break;
+          }
         }
       }
 
-      const apiUrl = `https://openaccess-api.clevelandart.org/api/artworks?&${params.toString()}`;
+      // Advanced Search Fields
+      if (submittedSearchView === true) {
+        if (advancedSearchParams.artist.trim()) {
+          params.set("artists", advancedSearchParams.artist.trim());
+        }
+
+        if (advancedSearchParams.title.trim()) {
+          params.set("title", advancedSearchParams.title.trim());
+        }
+
+        if (advancedSearchParams.technique.trim()) {
+          params.set("technique", advancedSearchParams.technique.trim());
+        }
+
+        if (advancedSearchParams.culture.trim()) {
+          params.set("culture", advancedSearchParams.culture.trim());
+        }
+      }
+
+      const apiUrl = `https://openaccess-api.clevelandart.org/api/artworks?${params.toString()}`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -95,7 +123,7 @@ function App() {
     return () => {
       controller.abort();
     };
-  }, [searchQuery, searchMode]);
+  }, [searchQuery, searchMode, advancedSearchParams, submittedSearchView]);
 
   return (
     <>
@@ -109,12 +137,20 @@ function App() {
       </ToggleButton>
       {searchView === false && (
         <SearchForm
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          setSearchQuery={setSearchQuery}
-          setSearchMode={setSearchMode}
-          setSelectedMode={setSelectedMode}
-          selectedMode={selectedMode}
+          onSearch={(params) => {
+            setSearchQuery(params.query);
+            setSearchMode(params.mode);
+            setSubmittedSearchView(false);
+          }}
+        />
+      )}
+
+      {searchView === true && (
+        <AdvancedSearchForm
+          onSearch={(params) => {
+            setAdvancedSearchParams(params);
+            setSubmittedSearchView(true);
+          }}
         />
       )}
 

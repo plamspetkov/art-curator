@@ -1,27 +1,32 @@
-import type { Dispatch, SetStateAction, SubmitEvent } from "react";
-import type { SearchMode } from "../App";
+import { useState, type SubmitEvent } from "react";
 
-type SearchFormProps = {
-  searchInput: string;
-  setSearchInput: Dispatch<SetStateAction<string>>;
-  setSearchQuery: Dispatch<SetStateAction<string>>;
-  setSearchMode: Dispatch<SetStateAction<SearchMode>>;
-  setSelectedMode: Dispatch<SetStateAction<SearchMode>>;
-  selectedMode: SearchMode;
+export type SearchMode =
+  | "all"
+  | "artists"
+  | "title"
+  | "medium"
+  | "technique"
+  | "culture";
+
+export type SimpleSearchParams = {
+  query: string;
+  mode: SearchMode;
 };
 
-const SearchForm = ({
-  searchInput,
-  setSearchInput,
-  setSearchQuery,
-  setSearchMode,
-  selectedMode,
-  setSelectedMode,
-}: SearchFormProps) => {
+type SearchFormProps = {
+  onSearch: (params: SimpleSearchParams) => void;
+};
+
+const SearchForm = ({ onSearch }: SearchFormProps) => {
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [selectedMode, setSelectedMode] = useState<SearchMode>("all");
+
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSearchQuery(searchInput);
-    setSearchMode(selectedMode);
+    onSearch({
+      query: searchInput,
+      mode: selectedMode,
+    });
   }
 
   const modes: SearchMode[] = [

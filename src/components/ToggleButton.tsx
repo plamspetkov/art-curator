@@ -9,7 +9,7 @@ function ToggleButton({ pressed, onToggle, children }: ToggleButtonProps) {
     <label className="switch">
       <input
         type="checkbox"
-        checked={Boolean(pressed)}
+        checked={pressed}
         onChange={onToggle}
         aria-label={typeof children === "string" ? children : undefined}
       />

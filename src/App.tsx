@@ -3,8 +3,11 @@ import "./App.css";
 import ArtworkCard from "./components/ArtworkCard";
 import type { Artwork } from "./types/Artwork";
 import SearchForm from "./components/SearchForm";
+import ToggleButton from "./components/ToggleButton";
 
-export type searchMode =
+export type SearchView = boolean;
+
+export type SearchMode =
   | "all"
   | "artists"
   | "title"
@@ -13,13 +16,15 @@ export type searchMode =
   | "culture";
 
 function App() {
+  const [searchView, setSearchView] = useState<SearchView>(false);
+
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedMode, setSelectedMode] = useState<searchMode>("all");
-  const [searchMode, setSearchMode] = useState<searchMode>("all");
+  const [selectedMode, setSelectedMode] = useState<SearchMode>("all");
+  const [searchMode, setSearchMode] = useState<SearchMode>("all");
 
   console.log("seach query: ", searchQuery);
 
@@ -96,14 +101,22 @@ function App() {
     <>
       <h1>Art Curator</h1>
 
-      <SearchForm
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        setSearchQuery={setSearchQuery}
-        setSearchMode={setSearchMode}
-        setSelectedMode={setSelectedMode}
-        selectedMode={selectedMode}
-      />
+      <ToggleButton
+        pressed={searchView}
+        onToggle={() => setSearchView((prev) => !prev)}
+      >
+        {searchView ? "ON" : "OFF"}
+      </ToggleButton>
+      {searchView === false && (
+        <SearchForm
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          setSearchQuery={setSearchQuery}
+          setSearchMode={setSearchMode}
+          setSelectedMode={setSelectedMode}
+          selectedMode={selectedMode}
+        />
+      )}
 
       {isLoading && <p>Loading artworks...</p>}
 

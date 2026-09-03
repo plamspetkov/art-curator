@@ -1,13 +1,13 @@
 import type { Dispatch, SetStateAction, SubmitEvent } from "react";
-import type { searchMode } from "../App";
+import type { SearchMode } from "../App";
 
 type SearchFormProps = {
   searchInput: string;
   setSearchInput: Dispatch<SetStateAction<string>>;
   setSearchQuery: Dispatch<SetStateAction<string>>;
-  setSearchMode: Dispatch<SetStateAction<searchMode>>;
-  setSelectedMode: Dispatch<SetStateAction<searchMode>>;
-  selectedMode: searchMode;
+  setSearchMode: Dispatch<SetStateAction<SearchMode>>;
+  setSelectedMode: Dispatch<SetStateAction<SearchMode>>;
+  selectedMode: SearchMode;
 };
 
 const SearchForm = ({
@@ -24,7 +24,7 @@ const SearchForm = ({
     setSearchMode(selectedMode);
   }
 
-  const modes: searchMode[] = [
+  const modes: SearchMode[] = [
     "all",
     "artists",
     "title",
